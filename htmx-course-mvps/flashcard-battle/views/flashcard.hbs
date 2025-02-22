@@ -1,0 +1,8 @@
+<div class="flashcard">
+    <p><strong>Question:</strong> {{flashcard.question}}</p>
+    <button 
+        hx-on:click="htmx.toggleClass(htmx.find('#answer'), 'hidden')">
+        Toggle Answer
+    </button>
+    <p id="answer" class="hidden"><strong>Answer:</strong> {{flashcard.answer}}</p>
+</div>

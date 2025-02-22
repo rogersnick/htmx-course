@@ -1,0 +1,11 @@
+<h1>Hackathon Idea Generator</h1>
+
+<form hx-post="/generate" hx-target="#idea-container" hx-swap="outerHTML">
+    <label>Enter a keyword:</label>
+    <input type="text" name="keyword" required>
+    <button type="submit">Generate Idea</button>
+</form>
+
+<div id="idea-container">
+    <p>Enter a keyword above to generate a hackathon project idea!</p>
+</div>

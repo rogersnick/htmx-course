@@ -1,0 +1,7 @@
+<h1>Flashcard Battle</h1>
+<div id="flashcard-container">
+    {{> flashcard}}
+</div>
+<button hx-get="/flashcard" hx-target="#flashcard-container" hx-swap="innerHTML">
+    Next Question
+</button>

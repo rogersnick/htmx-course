@@ -1,0 +1,11 @@
+<h1>Crowd-Powered Story Builder</h1>
+
+<div id="story-container">
+    {{> story}}
+</div>
+
+<form hx-post="/add-sentence" hx-target="#story-container" hx-swap="outerHTML">
+    <label>Add the next sentence:</label>
+    <input type="text" name="sentence" required>
+    <button type="submit">Submit</button>
+</form>

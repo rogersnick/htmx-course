@@ -1,0 +1,13 @@
+{
+  "name": "flashcard-battle",
+  "version": "1.0.0",
+  "description": "MVP for Flashcard Battle",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.2"
+  }
+}
