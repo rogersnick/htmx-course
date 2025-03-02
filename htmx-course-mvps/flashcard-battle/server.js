@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 // API route to get a new flashcard
 app.get("/flashcard", (req, res) => {
   const flashcard = flashcards[Math.floor(Math.random() * flashcards.length)];
-  res.render("flashcard", { flashcard });
+  res.render("flashcard", { layout: 'naked-hypermedia', flashcard });
 });
 
 // Start server
