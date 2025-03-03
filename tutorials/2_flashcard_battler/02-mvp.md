@@ -72,7 +72,7 @@ app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PO
 ---
 
 ### **📜 Step 3: Create `views/layout.hbs` (Base Layout)**
-This **wraps all pages** in a simple structure.
+This **wraps all pages** in a simple structure. This loads htmx for us from the unpkg CDN (content delivery network).
 
 ```html
 <!DOCTYPE html>
@@ -107,6 +107,8 @@ This **loads the first flashcard** and sets up HTMX to fetch new ones.
 </button>
 ```
 
+We are referencing a separate template called `flashcard`, which we will create next. We will re-use this template for rendering new questions when they are requested from the front end.
+
 ---
 
 ### **📜 Step 5: Create `views/flashcard.hbs` (Flashcard Partial)**
@@ -119,6 +121,8 @@ This **renders a flashcard**, with a button to reveal the answer.
     <p id="answer" style="display: none;"><strong>Answer:</strong> {{flashcard.answer}}</p>
 </div>
 ```
+
+We are going to use this partial both on the homepage as well as in subsequent requests to `/flashcard`. Using the same code twice is good practice so that we only need to update one spot if anything changes.
 
 ---
 
@@ -153,6 +157,8 @@ button:hover {
     background: #0056b3;
 }
 ```
+
+We are keeping this basic for now. Feeling adventurous? Try out some alternatives like tailwind and design to your heart's content.
 
 ---
 

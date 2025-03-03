@@ -24,10 +24,9 @@ flashcard-battle/
 
 ### **📜 Step 1: Install Dependencies**
 ```sh
-npm install express express-handlebars dotenv ai
+npm install dotenv ai @ai-sdk/openai
 ```
 
-- **`express` & `express-handlebars`** → Server & templating engine.  
 - **`dotenv`** → Securely store OpenAI API key.  
 - **`ai`** → Vercel's SDK for AI-based responses.
 - **`@ai-sdk/openai`** → Let's us use models from OpenAI with the SDK
@@ -43,56 +42,48 @@ OPENAI_API_KEY=your-openai-api-key-here
 
 > 🚨 **Replace `your-openai-api-key-here` with your actual OpenAI API key**.
 
+Once you have created this file, add this line to the top of `server.js`
+
+```js
+// server.js
+require("dotenv").config();
+```
+This wil ensure that we can access our environment variables using `process.env.OPENAI_API_KEY`. This is required for working with the `ai` sdk next.
+
 ---
 
-### **📜 Step 3: Update `server.js` (Main Express Server)**
+### **📜 Step 3: Create `lib/generate-flash-card.js`**
 - Connects to OpenAI using Vercel SDK.  
 - Generates **flashcard questions dynamically**.  
 
-```javascript
-require("dotenv").config();
-const express = require("express");
-const exphbs = require("express-handlebars");
+Now that we have our API keys set up, let's create some code to actually generate flashcards. Make a new file called `generate-flash-card.js` and add the following code to it:
+
+```js
+// lib/generate-flash-card.js
 const ai = require('ai');
 const openaiSDK = require("@ai-sdk/openai");
 
-const app = express();
-const PORT = 3000;
+const prompt = `
+Task:
+Generate a challenging trivia question.
 
-// Set up Handlebars
-app.engine(
-"hbs",
-  exphbs.engine({
-    extname: "hbs",
-    defaultLayout: "layout",
-    layoutsDir: __dirname + "/views/",
-    partialsDir: __dirname + "/views/",
-  })
-);
-app.set("view engine", "hbs");
+Response:
+Reply with valid json responses.
 
-// Serve static files
-app.use(express.static("public"));
+Format:
+{
+  "question": "...",
+  "answer": "..."
+}
+`
 
-// Home route - load the first AI-generated flashcard
-app.get("/", async (req, res) => {
-  const flashcard = await generateFlashcard();
-  res.render("index", { flashcard });
-});
-
-// API route to generate a new flashcard dynamically
-app.get("/flashcard", async (req, res) => {
-  const flashcard = await generateFlashcard();
-  res.render("flashcard", { flashcard });
-});
-
-// Function to generate a flashcard using OpenAI
 async function generateFlashcard() {
   try {
     const { text } = await ai.generateText({
-      model: openaiSDK.openai('gpt-3.5-turbo'),
-      system: "You are a creative quiz master.",
-      prompt: "Generate a multiple-choice question with four options. Format the response as JSON: { 'question': '...', 'choices': ['A', 'B', 'C', 'D'], 'answer': 'Correct Answer' }.",
+      model: openaiSDK.openai('gpt-4o-mini'),
+      system: "You are an unpredictable quiz master.",
+      prompt,
+      temperature: 0.9,
     });
 
     const response = JSON.parse(text);
@@ -106,43 +97,42 @@ async function generateFlashcard() {
     };
   }
 }
-// Start server
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+
+module.exports = { generateFlashcard };
+```
+
+The function above consistently 
+
+### **📜 Step 4: Update `server.js` (Main Express Server)**
+- Connects the routes `/` and `/flashcard` to our trivia generating code.
+
+Now that we have a function to generate flash cards, let's hook it up to a couple of our routes. Import that function in `server.js` and replace the code for our two `GET` requests with the following.
+
+
+```javascript
+// server.js
+const { generateFlashcard } = require('./lib/generate-flash-card');
+
+...
+
+// Home route - load the first AI-generated flashcard
+app.get("/", async (req, res) => {
+  const flashcard = await generateFlashcard();
+  res.render("index", { flashcard });
+});
+
+// API route to generate a new flashcard dynamically
+app.get("/flashcard", async (req, res) => {
+  const flashcard = await generateFlashcard();
+  res.render("flashcard", { flashcard });
+});
+
+...
 ```
 
 ---
 
-### **📜 Step 4: Update `views/index.hbs` (Main Page)**
-This ensures **HTMX loads new AI-generated flashcards dynamically**.
-
-```html
-<h1>AI-Powered Flashcard Battle</h1>
-
-<div id="flashcard-container">
-    {{> flashcard}}
-</div>
-
-<button hx-get="/flashcard" hx-target="#flashcard-container" hx-swap="outerHTML">
-    Next Question
-</button>
-```
-
----
-
-### **📜 Step 5: Update `views/flashcard.hbs` (Flashcard Partial)**
-This **renders each new flashcard dynamically**.
-
-```html
-<div class="flashcard">
-    <p><strong>Question:</strong> {{flashcard.question}}</p>
-    <button hx-get="/flashcard" hx-target="#answer" hx-swap="outerHTML">Show Answer</button>
-    <p id="answer" style="display: none;"><strong>Answer:</strong> {{flashcard.answer}}</p>
-</div>
-```
-
----
-
-### **📜 Step 6: Run the Updated Project**
+### **📜 Step 5: Run the Updated Project**
 ```sh
 node server.js
 ```
