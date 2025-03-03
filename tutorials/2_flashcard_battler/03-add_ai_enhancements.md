@@ -1,4 +1,5 @@
-### 🚀 **Enhancing Flashcard Battle with AI-Generated Questions**  
+### 🚀 **Enhancing Flashcard Battle with AI-Generated Questions**
+
 This enhancement will:  
 ✅ **Use OpenAI** (via Vercel SDK) to dynamically generate flashcard questions.  
 ✅ **Replace hardcoded questions** with AI-generated ones.  
@@ -7,7 +8,8 @@ This enhancement will:
 ---
 
 ### **📂 Updated Project Structure**
-```
+
+```tree
 flashcard-battle/
 │── views/
 │   ├── layout.hbs
@@ -15,6 +17,8 @@ flashcard-battle/
 │   ├── flashcard.hbs
 │── public/
 │   ├── styles.css
+│── lib/
+│   ├── generate-flash-card.js
 │── server.js
 │── .env
 │── package.json
@@ -23,6 +27,9 @@ flashcard-battle/
 ---
 
 ### **📜 Step 1: Install Dependencies**
+
+In order to upgrade the MVP, we will need to install three new dependencies.
+
 ```sh
 npm install dotenv ai @ai-sdk/openai
 ```
@@ -48,7 +55,7 @@ Once you have created this file, add this line to the top of `server.js`
 // server.js
 require("dotenv").config();
 ```
-This wil ensure that we can access our environment variables using `process.env.OPENAI_API_KEY`. This is required for working with the `ai` sdk next.
+This wil ensure that we can access our environment variables using `process.env.OPENAI_API_KEY`. This is required for working with the `ai` sdk.
 
 ---
 
@@ -81,7 +88,7 @@ async function generateFlashcard() {
   try {
     const { text } = await ai.generateText({
       model: openaiSDK.openai('gpt-4o-mini'),
-      system: "You are an unpredictable quiz master.",
+      system: "You are a quiz master focused on HTMX.",
       prompt,
       temperature: 0.9,
     });
@@ -101,7 +108,6 @@ async function generateFlashcard() {
 module.exports = { generateFlashcard };
 ```
 
-The function above consistently 
 
 ### **📜 Step 4: Update `server.js` (Main Express Server)**
 - Connects the routes `/` and `/flashcard` to our trivia generating code.
