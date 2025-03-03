@@ -1,15 +1,11 @@
+require("dotenv").config();
 const express = require("express");
+const session = require("express-session");
 const exphbs = require("express-handlebars");
+const { generateFlashcard } = require('./lib/generate-flash-card');
 
 const app = express();
 const PORT = 3000;
-
-// Sample flashcards
-const flashcards = [
-  { question: "What is the capital of France?", answer: "Paris" },
-  { question: "What is 2 + 2?", answer: "4" },
-  { question: "What is the speed of light?", answer: "299,792,458 m/s" },
-];
 
 // Set up Handlebars
 app.engine(
@@ -23,19 +19,43 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-// Serve static files
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "flashcard-secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
-// Home route - load a random flashcard
-app.get("/", (req, res) => {
-  const flashcard = flashcards[Math.floor(Math.random() * flashcards.length)];
+
+// Home route - load the first AI-generated flashcard
+app.get("/", async (req, res) => {
+  req.session.score = 0; // Reset score at start
+  const flashcard = await generateFlashcard();
   res.render("index", { flashcard });
 });
 
-// API route to get a new flashcard
-app.get("/flashcard", (req, res) => {
-  const flashcard = flashcards[Math.floor(Math.random() * flashcards.length)];
-  res.render("flashcard", { layout: 'naked-hypermedia', flashcard });
+// API route to generate a new flashcard dynamically
+app.get("/flashcard", async (req, res) => {
+  const flashcard = await generateFlashcard();
+  res.render("flashcard", { flashcard });
+});
+
+// API route to check the answer
+app.post("/check-answer", (req, res) => {
+  console.log(req.params, 'paramAS')
+  console.log(req.body, 'body');
+  const { selectedAnswer, correctAnswer } = req.body;
+  const isCorrect = selectedAnswer === correctAnswer;
+
+  // Update score in session
+  if (isCorrect) {
+    req.session.score = (req.session.score || 0) + 1;
+  }
+
+  res.render("feedback", { isCorrect, score: req.session.score, correctAnswer });
 });
 
 // Start server

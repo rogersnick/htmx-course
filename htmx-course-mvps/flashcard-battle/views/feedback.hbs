@@ -1,0 +1,9 @@
+<div>
+    {{#if isCorrect}}
+        <p style="color: green;"><strong>✅ Correct!</strong></p>
+    {{else}}
+        <p style="color: red;"><strong>❌ Incorrect.</strong></p>
+        <p>The correct answer was {{correctAnswer}}</p>
+    {{/if}}
+    <p>Current Score: <span id="score">{{score}}</span></p>
+</div>
