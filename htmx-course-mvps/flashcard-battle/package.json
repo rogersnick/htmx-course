@@ -1,13 +1,18 @@
 {
   "name": "flashcard-battle",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "MVP for Flashcard Battle",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.1.15",
+    "ai": "^4.1.47",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
-    "express-handlebars": "^7.0.2"
+    "express-handlebars": "^7.0.2",
+    "express-session": "^1.18.1"
   }
 }
