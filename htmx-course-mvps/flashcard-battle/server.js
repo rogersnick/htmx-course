@@ -45,8 +45,6 @@ app.get("/flashcard", async (req, res) => {
 
 // API route to check the answer
 app.post("/check-answer", (req, res) => {
-  console.log(req.params, 'paramAS')
-  console.log(req.body, 'body');
   const { selectedAnswer, correctAnswer } = req.body;
   const isCorrect = selectedAnswer === correctAnswer;
 
