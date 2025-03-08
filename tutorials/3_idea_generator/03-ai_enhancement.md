@@ -1,4 +1,5 @@
-### 🚀 **Enhancing Hackathon Idea Generator with AI-Powered Ideas**  
+### 🚀 **Enhancing Hackathon Idea Generator with AI-Powered Ideas**
+
 This update will:  
 ✅ **Use OpenAI (via Vercel SDK) to generate hackathon ideas dynamically**.  
 ✅ **Replace hardcoded ideas with AI-generated ones**.  
@@ -24,10 +25,9 @@ hackathon-idea-generator/
 
 ## **📜 Step 1: Install Dependencies**
 ```sh
-npm install express express-handlebars dotenv ai
+npm install dotenv ai @ai-sdk/openai
 ```
 
-- **`express` & `express-handlebars`** → Server & templating engine.  
 - **`dotenv`** → Securely store OpenAI API key.  
 - **`ai`** → Vercel SDK for AI-powered responses.  
 - **`@ai-sdk/openai`** → Let's us use models from OpenAI with the SDK
@@ -50,37 +50,17 @@ OPENAI_API_KEY=your-openai-api-key-here
 - Uses **OpenAI to generate relevant project ideas**.  
 - Returns **AI-generated response dynamically via HTMX**.  
 
+Add the required imports at the top. dotenv allows us to store our api key in an environment variable.
+
 ```javascript
 require("dotenv").config();
-const express = require("express");
-const exphbs = require("express-handlebars");
 const ai = require('ai');
 const openaiSDK = require("@ai-sdk/openai");
+```
 
-const app = express();
-const PORT = 3000;
+Now, we will adjust the api routes to use dynamically generated ideas:
 
-// Set up Handlebars
-app.engine(
-"hbs",
-  exphbs.engine({
-    extname: "hbs",
-    defaultLayout: "layout",
-    layoutsDir: __dirname + "/views/",
-    partialsDir: __dirname + "/views/",
-  })
-);
-app.set("view engine", "hbs");
-
-// Serve static files
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
-
-// Home route - renders form
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
+```js
 // API route to generate AI-powered idea
 app.post("/generate", async (req, res) => {
   const keyword = req.body.keyword || "random";
@@ -104,9 +84,6 @@ async function generateIdea(keyword) {
     return "Oops! Could not generate an idea. Try again.";
   }
 }
-
-// Start server
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 ```
 
 ---
