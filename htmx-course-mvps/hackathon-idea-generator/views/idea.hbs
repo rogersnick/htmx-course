@@ -1,6 +1,11 @@
 <div id="idea-container">
     <h2>Generated Idea:</h2>
     <p>{{idea}}</p>
+
+    <div id="votes-container">
+        {{> votes}}
+    </div>
+
     <button hx-post="/generate" hx-target="#idea-container" hx-swap="outerHTML">
         Generate Another Idea
     </button>

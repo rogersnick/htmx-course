@@ -7,7 +7,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.2.5",
+    "ai": "^4.1.61",
+    "dotenv": "^16.4.7",
     "express": "^4.18.2",
-    "express-handlebars": "^7.0.2"
+    "express-handlebars": "^7.0.2",
+    "sqlite3": "^5.1.7"
   }
 }
