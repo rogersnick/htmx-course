@@ -1,0 +1,9 @@
+<p>Votes: <span id="vote-count">{{votes}}</span></p>
+
+<button hx-post="/vote-up/{{ideaId}}" hx-target="#votes-container" hx-swap="innerHTML">
+    👍 Upvote
+</button>
+
+<button hx-post="/vote-down/{{ideaId}}" hx-target="#votes-container" hx-swap="innerHTML">
+    👎 Downvote
+</button>

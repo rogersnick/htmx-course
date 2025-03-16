@@ -3,6 +3,7 @@
 **/.env.*
 **/node_modules
 **/dev.db
+**/*.db
 *.sh
 *.zip
 flashcard-battle-enhanced
