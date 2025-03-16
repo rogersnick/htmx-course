@@ -23,7 +23,7 @@ hackathon-idea-generator/
 
 ---
 
-## **📜 Step 1: Install Dependencies**
+## **📜 Step 1: Install New Dependencies**
 ```sh
 npm install dotenv ai @ai-sdk/openai
 ```
@@ -107,53 +107,7 @@ async function generateIdea(keyword) {
 
 ---
 
-## **📜 Step 5: Create `views/idea.hbs` (Idea Partial)**
-- Dynamically **displays AI-generated hackathon idea**.  
-- Includes a **button to generate another idea**.  
-
-```html
-<div id="idea-container">
-    <h2>Generated Idea:</h2>
-    <p>{{idea}}</p>
-    <button hx-post="/generate" hx-target="#idea-container" hx-swap="outerHTML">
-        Generate Another Idea
-    </button>
-</div>
-```
-
----
-
-## **📜 Step 6: Create `public/styles.css` (Basic Styling)**
-```css
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-}
-
-input {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    padding: 10px;
-    border: none;
-    background: #28a745;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #218838;
-}
-```
-
----
-
-## **📜 Step 7: Run the AI-Powered Hackathon Idea Generator**
+## **📜 Step 5: Run the AI-Powered Hackathon Idea Generator**
 ```sh
 node server.js
 ```
