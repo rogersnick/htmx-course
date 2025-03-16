@@ -1,8 +1,16 @@
 <div class="flashcard">
     <p><strong>Question:</strong> {{flashcard.question}}</p>
-    <button 
-        hx-on:click="htmx.toggleClass(htmx.find('#answer'), 'hidden')">
-        Toggle Answer
-    </button>
-    <p id="answer" class="hidden"><strong>Answer:</strong> {{flashcard.answer}}</p>
+
+    <form hx-post="/check-answer" hx-target="#feedback-container" hx-swap="outerHTML">
+        {{#each flashcard.choices}}
+            <label>
+                <input type="radio" name="selectedAnswer" value="{{this}}" required>
+                {{this}}
+            </label><br>
+        {{/each}}
+        <input type="hidden" name="correctAnswer" value="{{flashcard.answer}}">
+        <button type="submit">Submit Answer</button>
+    </form>
+
+    <div id="feedback-container"></div>
 </div>
